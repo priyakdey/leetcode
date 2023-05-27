@@ -76,20 +76,45 @@ class Solution:
     #
     #     return products_array
 
+    # def productExceptSelf(self, nums: List[int]) -> List[int]:
+    #     """This solution takes the prefix and postfix approach but with O(1) solution"""
+    #
+    #     products = [1]
+    #
+    #     # we are calculating the prefix product and pushing to this array
+    #     for i in range(1, len(nums)):
+    #         products.append(nums[i - 1] * products[-1])
+    #
+    #     postfix_product = 1
+    #     products[-1] = products[-1] * postfix_product
+    #
+    #     for i in range(len(nums) - 1 - 1, -1, -1):
+    #         postfix_product *= nums[i + 1]
+    #         products[i] = products[i] * postfix_product
+    #
+    #     return products
+
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        """This solution takes the prefix and postfix approach but with O(1) solution"""
+        """Try and do this in one pass and with no extra space"""
+        if len(nums) == 2:
+            return nums[::-1]
 
-        products = [1]
+        products = [1 for _ in nums]
 
-        # we are calculating the prefix product and pushing to this array
-        for i in range(1, len(nums)):
-            products.append(nums[i - 1] * products[-1])
-
+        prefix_product = 1
         postfix_product = 1
-        products[-1] = products[-1] * postfix_product
+        i, j = 1, len(nums) - 1 - 1
 
-        for i in range(len(nums) - 1 - 1, -1, -1):
-            postfix_product *= nums[i + 1]
-            products[i] = products[i] * postfix_product
+        while i < len(nums):
+            # calculate the prefix product for ith member and set products[i]
+            prefix_product = nums[i - 1] * prefix_product
+            products[i] = products[i] * prefix_product
+
+            # calculate the post product for jth member and set products[j]
+            postfix_product = nums[j + 1] * postfix_product
+            products[j] = products[j] * postfix_product
+
+            i += 1
+            j -= 1
 
         return products
