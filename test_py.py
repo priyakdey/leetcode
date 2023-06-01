@@ -1,27 +1,36 @@
 class Solution:
-    def minJumps(self, arr, n):
-        if arr[0] == 0:
-            return -1
+    # Function to find the days of buying and selling stock for max profit.
+    def stockBuySell(self, A, n):
+        profit = []
+        max_price = A[0]
 
-        start = 0
-        jumps = 0
-        while start < len(arr):
-            if arr[start] == 0:
-                return -1
-            jumps += 1
-            i, j = start + 1, start + 1 + arr[start]
-            # find max in that range and that is going to be next start
-            print(start, i, j)
-            max_value = arr[i]
-            offset = 1
-            for k in range(i, j + 1):
-                if arr[k] >= max_value:
-                    offset += k
-                    max_value = arr[k]
+        max_price_index = 0
+        buying_price_index = 0
 
-            start = start + offset
-        return jumps
+        for i in range(1, n):
+            price = A[i]
+            if price < max_price:
+                profit.append([buying_price_index, max_price_index])
+                buying_price_index = i
 
+            max_price = price
+            max_price_index = i
+
+        if buying_price_index != max_price_index:
+            profit.append([buying_price_index, max_price_index])
+
+        return profit
+
+
+# fmt: off
 
 soln = Solution()
-print(soln.minJumps([1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9], 11))
+
+nums = [4, 3, 2, 1]
+
+print(nums)
+
+print(soln.stockBuySell(nums, len(nums)))
+
+
+# fmt: on
